@@ -8,5 +8,5 @@ fn ferret_by_id(id: &str) -> String {
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![ferret_by_id])
+    rocket::build().mount("/api/v1", routes![ferret_by_id])
 }

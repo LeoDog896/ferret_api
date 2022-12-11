@@ -6,6 +6,6 @@ Restful API for retrieving ferrets given different search parameters
 
 Root for the following queries will be in `/api/v1/`:
 
-`/ferrets/<uuid>`: search a ferret by UUID
+`ferrets/<uuid>`: search a ferret by UUID
 
-`/ferrets`: 
+`ferrets`: 
