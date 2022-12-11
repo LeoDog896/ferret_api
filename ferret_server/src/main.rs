@@ -1,4 +1,5 @@
-#[macro_use] extern crate rocket;
+#[macro_use]
+extern crate rocket;
 
 #[get("/ferrets/<id>")]
 fn ferret_by_id(id: &str) -> String {

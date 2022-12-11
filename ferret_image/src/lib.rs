@@ -1,4 +1,9 @@
-pub enum FerretColor {
+use serde::{Serialize, Deserialize};
+
+/// Colors of a ferret.
+/// Referenced from https://www.ferret.org/pdfs/Ferret_Colors_and_Patterns.pdf
+#[derive(Serialize, Deserialize, Debug)]
+pub enum Color {
     Albino,
     Black,
     BlackSable,
@@ -6,10 +11,13 @@ pub enum FerretColor {
     Chocolate,
     Cinnamon,
     DarkEyedWhite,
-    Sable
+    Sable,
 }
 
-pub enum FerretPattern {
+/// Patterns of a ferret.
+/// Referenced from https://www.ferret.org/pdfs/Ferret_Colors_and_Patterns.pdf
+#[derive(Serialize, Deserialize, Debug)]
+pub enum Pattern {
     Blaze,
     Mitt,
     Mutt,
@@ -18,11 +26,20 @@ pub enum FerretPattern {
     Roan,
     Solid,
     Standard,
-    Patterned
+    Patterned,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub enum Sex {
+    Male,
+    Female
+}
+
+/// Information about a ferret.
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FerretInfo {
     pub name: Option<String>,
-    pub color: Option<FerretColor>,
-    pub pattern: Option<FerretPattern>,
+    pub sex: Option<Sex>,
+    pub color: Option<Color>,
+    pub pattern: Option<Pattern>,
 }
