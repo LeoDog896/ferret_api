@@ -11,7 +11,7 @@ cd "$(dirname "$0")"
 cd ../
 
 main() {
-    echo do awesome stuff
+    # TODO implement this
 }
 
 main "$@"

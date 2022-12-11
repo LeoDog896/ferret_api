@@ -1,14 +1,28 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+pub enum FerretColor {
+    Albino,
+    Black,
+    BlackSable,
+    Champagne,
+    Chocolate,
+    Cinnamon,
+    DarkEyedWhite,
+    Sable
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub enum FerretPattern {
+    Blaze,
+    Mitt,
+    Mutt,
+    Panda,
+    Point,
+    Roan,
+    Solid,
+    Standard,
+    Patterned
+}
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub struct FerretInfo {
+    pub name: Option<String>,
+    pub color: Option<FerretColor>,
+    pub pattern: Option<FerretPattern>,
 }
