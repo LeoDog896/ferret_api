@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 /// Colors of a ferret.
 /// Referenced from https://www.ferret.org/pdfs/Ferret_Colors_and_Patterns.pdf
@@ -32,7 +32,7 @@ pub enum Pattern {
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub enum Sex {
     Male,
-    Female
+    Female,
 }
 
 /// All creative commons licenses.
@@ -78,33 +78,37 @@ pub enum ImageInfo {
     },
 }
 
-#[test]
-fn test_licensed() {
-    let json_string = r#"{
-        "info": {
-            "name": "Fluffy",
-            "sex": "Male",
-            "color": "Black",
-            "pattern": "Solid"
-        },
-        "author": "Rusty",
-        "source": "https://www.example.com",
-        "license": "Attribution"
-    }"#;
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_licensed() {
+        let json_string = r#"{
+            "info": {
+                "name": "Fluffy",
+                "sex": "Male",
+                "color": "Black",
+                "pattern": "Solid"
+            },
+            "author": "Rusty",
+            "source": "https://www.example.com",
+            "license": "Attribution"
+        }"#;
 
-    serde_json::from_str::<ImageInfo>(json_string).unwrap();
-}
+        serde_json::from_str::<ImageInfo>(json_string).unwrap();
+    }
 
-#[test]
-fn test_bad_licensed() {
-    let json_string = r#"{
-        "info": {
-            "name": "Fluffy",
-            "sex": "Male",
-            "color": "Black",
-            "pattern": "Solid"
-        },
-    }"#;
+    #[test]
+    fn test_bad_licensed() {
+        let json_string = r#"{
+            "info": {
+                "name": "Fluffy",
+                "sex": "Male",
+                "color": "Black",
+                "pattern": "Solid"
+            },
+        }"#;
 
-    assert!(serde_json::from_str::<ImageInfo>(json_string).is_err());
+        assert!(serde_json::from_str::<ImageInfo>(json_string).is_err());
+    }
 }
