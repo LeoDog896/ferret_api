@@ -22,7 +22,7 @@ enum Subcommand {
     Verify,
 }
 
-fn enum_select_default<E>(prompt: &str, default: &str) -> Option<E>
+fn enum_select_default<E>(prompt: &str, default: &str) -> Result<Option<E>>
 where
     E: IntoEnumIterator + std::fmt::Display,
 {
@@ -32,20 +32,17 @@ where
         .with_prompt(prompt)
         .default(items.len() - 1)
         .items(items.as_slice())
-        .interact()
-        .unwrap();
+        .interact()?;
     if selection == items.len() - 1 {
-        None
+        Ok(None)
     } else {
-        Some(
-            E::iter()
-                .nth(selection)
-                .expect("Past bounds of enum iterator. Dialoguer may have changed."),
-        )
+        Ok(Some(E::iter().nth(selection).expect(
+            "Past bounds of enum iterator. Dialoguer may have changed.",
+        )))
     }
 }
 
-fn enum_select<E>(prompt: &str) -> E
+fn enum_select<E>(prompt: &str) -> Result<E>
 where
     E: IntoEnumIterator + std::fmt::Display,
 {
@@ -53,32 +50,31 @@ where
     let selection = Select::with_theme(&ColorfulTheme::default())
         .with_prompt(prompt)
         .items(items.as_slice())
-        .interact()
-        .unwrap();
-    E::iter()
+        .interact()?;
+
+    Ok(E::iter()
         .nth(selection)
-        .expect("Past bounds of enum iterator. Dialoguer may have changed.")
+        .expect("Past bounds of enum iterator. Dialoguer may have changed."))
 }
 
-fn biologocal_info() -> BiologicalInfo {
+fn biologocal_info() -> Result<BiologicalInfo> {
     let name: Option<String> = Input::with_theme(&ColorfulTheme::default())
         .with_prompt("Ferret's name")
         .interact()
-        .map(|s: String| s.is_empty().not().then(|| s))
-        .unwrap();
+        .map(|s: String| s.is_empty().not().then(|| s))?;
 
-    let sex = enum_select_default::<Sex>("Ferret's sex", "Unspecified");
+    let sex = enum_select_default::<Sex>("Ferret's sex", "Unspecified")?;
 
-    let color = enum_select_default::<Color>("Ferret's color", "Unspecified");
+    let color = enum_select_default::<Color>("Ferret's color", "Unspecified")?;
 
-    let pattern = enum_select_default::<Pattern>("Ferret's pattern", "Unspecified");
+    let pattern = enum_select_default::<Pattern>("Ferret's pattern", "Unspecified")?;
 
-    BiologicalInfo {
+    Ok(BiologicalInfo {
         name,
         sex,
         color,
         pattern,
-    }
+    })
 }
 
 fn collect_ferret_info() -> Result<ImageInfo> {
@@ -86,23 +82,20 @@ fn collect_ferret_info() -> Result<ImageInfo> {
 
     let is_public_domain = Confirm::with_theme(&ColorfulTheme::default())
         .with_prompt("Is the image in the public domain?")
-        .interact()
-        .unwrap();
+        .interact()?;
 
     let source: Option<String> = Input::with_theme(&ColorfulTheme::default())
         .with_prompt("Source of image [e.g. URL] (optional, specify if applicable)")
         .interact()
-        .map(|s: String| s.is_empty().not().then(|| s))
-        .unwrap();
+        .map(|s: String| s.is_empty().not().then(|| s))?;
 
-    let bio = biologocal_info();
+    let bio = biologocal_info()?;
 
     if is_public_domain {
         let author: Option<String> = Input::with_theme(&ColorfulTheme::default())
             .with_prompt("Original author's name (optional)")
             .interact()
-            .map(|s: String| s.is_empty().not().then(|| s))
-            .unwrap();
+            .map(|s: String| s.is_empty().not().then(|| s))?;
 
         return Ok(ImageInfo::PublicDomain {
             info: bio,
@@ -112,10 +105,9 @@ fn collect_ferret_info() -> Result<ImageInfo> {
     } else {
         let author: String = Input::with_theme(&ColorfulTheme::default())
             .with_prompt("Original author's name")
-            .interact()
-            .unwrap();
+            .interact()?;
 
-        let license = enum_select::<License>("License");
+        let license = enum_select::<License>("License")?;
 
         return Ok(ImageInfo::Licensed {
             info: bio,
