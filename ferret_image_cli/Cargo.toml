@@ -10,3 +10,4 @@ anyhow = "1.0"
 clap = { version = "4.0.29", features = ["derive"] }
 dialoguer = "0.10.2"
 ferret_image = { path = "../ferret_image" }
+strum = { version = "0.24", features = ["derive"] }

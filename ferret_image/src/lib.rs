@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
+use strum_macros::{EnumIter, Display};
 
 /// Colors of a ferret.
 /// Referenced from https://www.ferret.org/pdfs/Ferret_Colors_and_Patterns.pdf
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, EnumIter, Display)]
 pub enum Color {
     Albino,
     Black,
@@ -16,7 +17,7 @@ pub enum Color {
 
 /// Patterns of a ferret.
 /// Referenced from https://www.ferret.org/pdfs/Ferret_Colors_and_Patterns.pdf
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, EnumIter, Display)]
 pub enum Pattern {
     Blaze,
     Mitt,
@@ -29,15 +30,17 @@ pub enum Pattern {
     Patterned,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, EnumIter, Display)]
 pub enum Sex {
     Male,
     Female,
 }
 
+
+
 /// All creative commons licenses.
 /// Referenced from https://creativecommons.org/about/cclicenses/
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, EnumIter, Display)]
 pub enum License {
     Attribution,
     AttributionShareAlike,
@@ -67,7 +70,7 @@ pub enum ImageInfo {
         /// Where the image was retrieved from.
         source: Option<String>,
     },
-    NonPublicDomain {
+    Licensed {
         info: BiologicalInfo,
         /// The name of the author of the image.
         author: String,
