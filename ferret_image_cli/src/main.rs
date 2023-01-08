@@ -1,4 +1,4 @@
-use std::ops::Not;
+use std::{ops::Not, io::Read};
 
 use anyhow::Result;
 use clap::Parser;
@@ -17,7 +17,11 @@ struct Args {
 #[derive(Parser, Debug)]
 enum Subcommand {
     /// Creates a ferret image
-    Create,
+    Create {
+        /// The source image file / URL
+        #[clap(short, long)]
+        source: String,
+    },
     /// Verifies the /images directory
     Verify,
 }
@@ -122,8 +126,21 @@ fn main() -> Result<()> {
     let args = Args::parse();
 
     match args.subcommand {
-        Subcommand::Create => {
+        Subcommand::Create { source } => { 
+            let file: Box<dyn Read> = if std::path::Path::new(&source).exists() {
+                // source is a file
+                Box::new(std::fs::File::open(&source)?)
+            } else if reqwest::Url::parse(&source).is_ok() {
+                // source is a URL, download it
+                Box::new(reqwest::blocking::get(&source)?)
+            } else {
+                println!("Source must be a file or URL");
+                std::process::exit(1)
+            };
+
             let ferret_info = collect_ferret_info()?;
+
+            
         }
         Subcommand::Verify => {
             println!("Verify");
