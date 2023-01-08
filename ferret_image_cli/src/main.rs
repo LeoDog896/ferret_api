@@ -5,6 +5,7 @@ use clap::Parser;
 use dialoguer::{theme::ColorfulTheme, Confirm, Input, Select};
 use ferret_image::{BiologicalInfo, Color, ImageInfo, License, Pattern, Sex};
 use strum::IntoEnumIterator;
+use uuid::Uuid;
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
@@ -127,7 +128,7 @@ fn main() -> Result<()> {
 
     match args.subcommand {
         Subcommand::Create { source } => { 
-            let file: Box<dyn Read> = if std::path::Path::new(&source).exists() {
+            let mut file: Box<dyn Read> = if std::path::Path::new(&source).exists() {
                 // source is a file
                 Box::new(std::fs::File::open(&source)?)
             } else if reqwest::Url::parse(&source).is_ok() {
@@ -140,7 +141,24 @@ fn main() -> Result<()> {
 
             let ferret_info = collect_ferret_info()?;
 
-            
+            let id = Uuid::new_v4();
+
+            let mut ferret_path = std::path::PathBuf::from("./images");
+            ferret_path.push(id.to_string());
+            std::fs::create_dir_all(ferret_path.parent().unwrap())?;
+
+            // Save the image
+            let mut image_path = ferret_path.clone();
+            image_path.push("image.png");
+            let mut image_file = std::fs::File::create(&image_path)?;
+            std::io::copy(&mut file, &mut image_file)?;
+
+            // Save the metadata
+            let mut metadata_path = ferret_path.clone();
+            metadata_path.push("image.json");
+            let mut metadata_file = std::fs::File::create(&metadata_path)?;
+            serde_json::to_writer_pretty(&mut metadata_file, &ferret_info)?;
+
         }
         Subcommand::Verify => {
             println!("Verify");

@@ -16,3 +16,10 @@ there are five modules: `ferret_api`, `ferret_server`, `ferret_image`, `ferret_i
 * `ferret_server` exposes a RESTful API for retrieving ferrets given different search parameters
 * `ferret_image` is the shared library for generating and maintainig the structure for ferret images
 * `ferret_image_cli` is a command line interface for generating and verifying ferret images. The verification functionality is used for the CI pipeline in order to verify new PRs.
+
+## image structure
+
+`/images/<uuid>` is the directory structure for a ferret image. The directory contains the following files:
+
+* `image.json` is the metadata for the ferret image
+* `image.png` is the image of the ferret
