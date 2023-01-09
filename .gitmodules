@@ -1,0 +1,3 @@
+[submodule "ferret_images"]
+	path = ferret_images
+	url = https://github.com/LeoDog896/ferret_images
