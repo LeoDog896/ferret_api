@@ -3,10 +3,7 @@ use clap::Parser;
 use dialoguer::{theme::ColorfulTheme, Confirm, Input, Select};
 use ferret_image::{BiologicalInfo, Color, ImageInfo, License, Pattern, Sex};
 use seek_bufread::BufReader;
-use std::{
-    fs::OpenOptions,
-    io::{BufRead, Cursor, Seek},
-};
+use std::io::{BufRead, Cursor, Seek};
 use strum::IntoEnumIterator;
 use uuid::Uuid;
 
