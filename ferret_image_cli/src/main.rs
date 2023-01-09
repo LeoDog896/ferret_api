@@ -4,8 +4,8 @@ use dialoguer::{theme::ColorfulTheme, Confirm, Input, Select};
 use ferret_image::{BiologicalInfo, Color, ImageInfo, License, Pattern, Sex};
 use seek_bufread::BufReader;
 use std::{
+    fs::OpenOptions,
     io::{BufRead, Cursor, Seek},
-    ops::Not,
 };
 use strum::IntoEnumIterator;
 use uuid::Uuid;
@@ -66,10 +66,7 @@ where
 }
 
 fn biologocal_info() -> Result<BiologicalInfo> {
-    let name: Option<String> = Input::with_theme(&ColorfulTheme::default())
-        .with_prompt("Ferret's name")
-        .interact()
-        .map(|s: String| s.is_empty().not().then(|| s))?;
+    let name = optional_input("Ferret's name")?;
 
     let sex = enum_select_default::<Sex>("Ferret's sex", "Unspecified")?;
 
@@ -85,6 +82,14 @@ fn biologocal_info() -> Result<BiologicalInfo> {
     })
 }
 
+fn optional_input(prompt: &str) -> Result<Option<String>> {
+    Ok(Input::with_theme(&ColorfulTheme::default())
+        .with_prompt(prompt)
+        .default("None_".into())
+        .interact()
+        .map(|s: String| (s == "None_".to_string()).then(|| s))?)
+}
+
 fn collect_ferret_info() -> Result<ImageInfo> {
     println!("Legal and credit information");
 
@@ -92,18 +97,12 @@ fn collect_ferret_info() -> Result<ImageInfo> {
         .with_prompt("Is the image in the public domain?")
         .interact()?;
 
-    let source: Option<String> = Input::with_theme(&ColorfulTheme::default())
-        .with_prompt("Source of image [e.g. URL] (optional, specify if applicable)")
-        .interact()
-        .map(|s: String| s.is_empty().not().then(|| s))?;
+    let source = optional_input("Source of image [e.g. URL] (optional, specify if applicable)")?;
 
     let bio = biologocal_info()?;
 
     if is_public_domain {
-        let author: Option<String> = Input::with_theme(&ColorfulTheme::default())
-            .with_prompt("Original author's name (optional)")
-            .interact()
-            .map(|s: String| s.is_empty().not().then(|| s))?;
+        let author = optional_input("Original author's name (optional)")?;
 
         return Ok(ImageInfo::PublicDomain {
             info: bio,
@@ -145,31 +144,36 @@ fn main() -> Result<()> {
                 std::process::exit(1)
             };
 
-            let ferret_info = collect_ferret_info()?;
-
             let id = Uuid::new_v4();
+            println!("UUID is {id}");
 
             let mut ferret_path = std::path::PathBuf::from("./images");
             ferret_path.push(id.to_string());
-            std::fs::create_dir_all(ferret_path.parent().unwrap())?;
+            std::fs::create_dir_all(&ferret_path)?;
 
-            // Save the image
             let mut image_path = ferret_path.clone();
             image_path.push("image.png");
 
-            // but first, convert it to PNG
+            // Convert to PNG
+            println!("Converting image to PNG (if applicable)");
             let image = image::io::Reader::new(&mut file)
                 .with_guessed_format()?
                 .decode()?;
-            
+
             // then save the image to the image file
+            println!("Saving...");
             image.save(image_path)?;
 
+            let ferret_info = collect_ferret_info()?;
+
             // Save the metadata
+            println!("Saving metadata...");
             let mut metadata_path = ferret_path.clone();
             metadata_path.push("image.json");
             let mut metadata_file = std::fs::File::create(&metadata_path)?;
             serde_json::to_writer_pretty(&mut metadata_file, &ferret_info)?;
+
+            println!("Done! PR your new changes!");
         }
         Subcommand::Verify => {
             println!("Verify");
