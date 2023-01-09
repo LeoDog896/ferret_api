@@ -1,11 +1,13 @@
-use std::{ops::Not, io::Read};
-
+use std::{ops::Not, io::{Read, BufRead, Seek}};
 use anyhow::Result;
 use clap::Parser;
 use dialoguer::{theme::ColorfulTheme, Confirm, Input, Select};
 use ferret_image::{BiologicalInfo, Color, ImageInfo, License, Pattern, Sex};
+use peekread::{SeekPeekReader, BufPeekReader};
 use strum::IntoEnumIterator;
 use uuid::Uuid;
+use seek_bufread::BufReader;
+use image::GenericImageView;
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
@@ -123,17 +125,22 @@ fn collect_ferret_info() -> Result<ImageInfo> {
     }
 }
 
+trait BufReadSeek: BufRead + Seek {}
+impl<T: BufRead + Seek> BufReadSeek for T {}
+
 fn main() -> Result<()> {
     let args = Args::parse();
 
     match args.subcommand {
         Subcommand::Create { source } => { 
-            let mut file: Box<dyn Read> = if std::path::Path::new(&source).exists() {
+            let mut file: Box<dyn BufReadSeek> = if std::path::Path::new(&source).exists() {
                 // source is a file
-                Box::new(std::fs::File::open(&source)?)
+                Box::new(BufReader::new(std::fs::File::open(&source)?))
             } else if reqwest::Url::parse(&source).is_ok() {
                 // source is a URL, download it
-                Box::new(reqwest::blocking::get(&source)?)
+                Box::new(BufPeekReader::new(
+                    reqwest::blocking::get(&source)?
+                ))
             } else {
                 println!("Source must be a file or URL");
                 std::process::exit(1)
@@ -151,7 +158,11 @@ fn main() -> Result<()> {
             let mut image_path = ferret_path.clone();
             image_path.push("image.png");
             let mut image_file = std::fs::File::create(&image_path)?;
-            std::io::copy(&mut file, &mut image_file)?;
+
+            // but first, convert it to PNG
+            let mut image = image::io::Reader::new(&mut file)
+                .with_guessed_format()?
+                .decode()?;
 
             // Save the metadata
             let mut metadata_path = ferret_path.clone();
