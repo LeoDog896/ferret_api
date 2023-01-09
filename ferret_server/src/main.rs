@@ -1,12 +1,14 @@
-#[macro_use]
-extern crate rocket;
+use actix_web::{get, App, HttpResponse, HttpServer, Responder};
 
-#[get("/ferrets/<id>")]
-fn ferret_by_id(id: &str) -> String {
-    format!("Grabbing ferret by {}", id)
+#[get("/")]
+async fn hello() -> impl Responder {
+    HttpResponse::Ok().body("Hello world!")
 }
 
-#[launch]
-fn rocket() -> _ {
-    rocket::build().mount("/api/v1", routes![ferret_by_id])
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| App::new().service(hello))
+        .bind(("127.0.0.1", 8080))?
+        .run()
+        .await
 }
