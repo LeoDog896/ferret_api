@@ -1,13 +1,14 @@
-use std::{ops::Not, io::{Read, BufRead, Seek}};
 use anyhow::Result;
 use clap::Parser;
 use dialoguer::{theme::ColorfulTheme, Confirm, Input, Select};
 use ferret_image::{BiologicalInfo, Color, ImageInfo, License, Pattern, Sex};
-use peekread::{SeekPeekReader, BufPeekReader};
+use seek_bufread::BufReader;
+use std::{
+    io::{BufRead, Cursor, Seek},
+    ops::Not,
+};
 use strum::IntoEnumIterator;
 use uuid::Uuid;
-use seek_bufread::BufReader;
-use image::GenericImageView;
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
@@ -132,15 +133,13 @@ fn main() -> Result<()> {
     let args = Args::parse();
 
     match args.subcommand {
-        Subcommand::Create { source } => { 
+        Subcommand::Create { source } => {
             let mut file: Box<dyn BufReadSeek> = if std::path::Path::new(&source).exists() {
                 // source is a file
                 Box::new(BufReader::new(std::fs::File::open(&source)?))
             } else if reqwest::Url::parse(&source).is_ok() {
-                // source is a URL, download it
-                Box::new(BufPeekReader::new(
-                    reqwest::blocking::get(&source)?
-                ))
+                let bytes = reqwest::blocking::get(&source)?.bytes()?;
+                Box::new(Cursor::new(bytes.to_vec()))
             } else {
                 println!("Source must be a file or URL");
                 std::process::exit(1)
@@ -157,19 +156,20 @@ fn main() -> Result<()> {
             // Save the image
             let mut image_path = ferret_path.clone();
             image_path.push("image.png");
-            let mut image_file = std::fs::File::create(&image_path)?;
 
             // but first, convert it to PNG
-            let mut image = image::io::Reader::new(&mut file)
+            let image = image::io::Reader::new(&mut file)
                 .with_guessed_format()?
                 .decode()?;
+            
+            // then save the image to the image file
+            image.save(image_path)?;
 
             // Save the metadata
             let mut metadata_path = ferret_path.clone();
             metadata_path.push("image.json");
             let mut metadata_file = std::fs::File::create(&metadata_path)?;
             serde_json::to_writer_pretty(&mut metadata_file, &ferret_info)?;
-
         }
         Subcommand::Verify => {
             println!("Verify");

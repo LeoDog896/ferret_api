@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use strum_macros::{EnumIter, Display};
+use strum_macros::{Display, EnumIter};
 
 /// Colors of a ferret.
 /// Referenced from https://www.ferret.org/pdfs/Ferret_Colors_and_Patterns.pdf
@@ -35,8 +35,6 @@ pub enum Sex {
     Male,
     Female,
 }
-
-
 
 /// All creative commons licenses.
 /// Referenced from https://creativecommons.org/about/cclicenses/

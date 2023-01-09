@@ -11,7 +11,6 @@ clap = { version = "4.0.29", features = ["derive"] }
 dialoguer = "0.10.2"
 ferret_image = { path = "../ferret_image" }
 image = "0.24.5"
-peekread = "0.1.1"
 reqwest = { version = "0.11.13", features = ["blocking"] }
 seek_bufread = "1.2.2"
 serde_json = "1.0.91"
