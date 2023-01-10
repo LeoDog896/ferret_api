@@ -1,3 +1,3 @@
 # www
 
-website for ferret API
+static website for ferret API

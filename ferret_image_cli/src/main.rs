@@ -144,7 +144,7 @@ fn main() -> Result<()> {
             let id = Uuid::new_v4();
             println!("UUID is {id}");
 
-            let mut ferret_path = std::path::PathBuf::from("./images");
+            let mut ferret_path = std::path::PathBuf::from("./ferret_images/collection");
             ferret_path.push(id.to_string());
             std::fs::create_dir_all(&ferret_path)?;
 
