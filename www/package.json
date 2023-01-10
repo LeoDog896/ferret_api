@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --public-url ./",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "parcel": "^2.8.2"
+  },
+  "devDependencies": {
+    "prettier": "2.8.2"
+  }
+}
