@@ -4,8 +4,10 @@ Restful API for retrieving ferrets given different search parameters
 
 ## Documentation
 
-Root for the following queries will be in `/api/v1/`:
+**You can not, with the API, programatically submit ferret photos**.
 
-`ferrets/<uuid>`: search a ferret by UUID
+Root for the following queries will be in `/v1/`:
 
-`ferrets`: 
+`ferrets/uuid/<uuid>`: search a ferret by UUID
+
+`ferrets/random`: gets a random ferret.
