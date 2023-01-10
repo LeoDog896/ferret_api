@@ -1,4 +1,4 @@
-# ferret_api
+# ferret_api ![made with love <3](https://img.shields.io/badge/made%20with-love-ff69b4?style=flat-square) 
 
 a little API for fetching the snoodliest of ferrets (all ferrets are welcome!)
 
