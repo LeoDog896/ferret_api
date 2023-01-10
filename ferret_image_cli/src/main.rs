@@ -149,10 +149,10 @@ fn main() -> Result<()> {
             std::fs::create_dir_all(&ferret_path)?;
 
             let mut image_path = ferret_path.clone();
-            image_path.push("image.png");
+            image_path.push("image.jpg");
 
             // Convert to PNG
-            println!("Converting image to PNG (if applicable)");
+            println!("Converting image to JPG (if applicable)");
             let image = image::io::Reader::new(&mut file)
                 .with_guessed_format()?
                 .decode()?;
