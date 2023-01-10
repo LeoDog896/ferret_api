@@ -82,9 +82,9 @@ fn biologocal_info() -> Result<BiologicalInfo> {
 fn optional_input(prompt: &str) -> Result<Option<String>> {
     Ok(Input::with_theme(&ColorfulTheme::default())
         .with_prompt(prompt)
-        .default("None_".into())
+        .default("_".into())
         .interact()
-        .map(|s: String| (s == "None_".to_string()).then(|| s))?)
+        .map(|s: String| (s != "_".to_string()).then(|| s))?)
 }
 
 fn collect_ferret_info() -> Result<ImageInfo> {
