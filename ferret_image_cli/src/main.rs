@@ -1,10 +1,12 @@
+mod dialogue_utils;
+
 use anyhow::Result;
 use clap::Parser;
-use dialoguer::{theme::ColorfulTheme, Confirm, Input, Select};
+use dialogue_utils::*;
+use dialoguer::{theme::ColorfulTheme, Confirm, Input};
 use ferret_image::{BiologicalInfo, Color, ImageInfo, License, Pattern, Sex};
 use seek_bufread::BufReader;
 use std::io::{BufRead, Cursor, Seek};
-use strum::IntoEnumIterator;
 use uuid::Uuid;
 
 /// Simple program to greet a person
@@ -27,41 +29,6 @@ enum Subcommand {
     Verify,
 }
 
-fn enum_select_default<E>(prompt: &str, default: &str) -> Result<Option<E>>
-where
-    E: IntoEnumIterator + std::fmt::Display,
-{
-    let mut items: Vec<String> = E::iter().map(|e| e.to_string()).collect();
-    items.push(default.to_string());
-    let selection = Select::with_theme(&ColorfulTheme::default())
-        .with_prompt(prompt)
-        .default(items.len() - 1)
-        .items(items.as_slice())
-        .interact()?;
-    if selection == items.len() - 1 {
-        Ok(None)
-    } else {
-        Ok(Some(E::iter().nth(selection).expect(
-            "Past bounds of enum iterator. Dialoguer may have changed.",
-        )))
-    }
-}
-
-fn enum_select<E>(prompt: &str) -> Result<E>
-where
-    E: IntoEnumIterator + std::fmt::Display,
-{
-    let items: Vec<String> = E::iter().map(|e| e.to_string()).collect();
-    let selection = Select::with_theme(&ColorfulTheme::default())
-        .with_prompt(prompt)
-        .items(items.as_slice())
-        .interact()?;
-
-    Ok(E::iter()
-        .nth(selection)
-        .expect("Past bounds of enum iterator. Dialoguer may have changed."))
-}
-
 fn biologocal_info() -> Result<BiologicalInfo> {
     let name = optional_input("Ferret's name")?;
 
@@ -71,20 +38,15 @@ fn biologocal_info() -> Result<BiologicalInfo> {
 
     let pattern = enum_select_default::<Pattern>("Ferret's pattern", "Unspecified")?;
 
+    let alt = optional_input("Alternative description")?;
+
     Ok(BiologicalInfo {
         name,
         sex,
         color,
         pattern,
+        alt,
     })
-}
-
-fn optional_input(prompt: &str) -> Result<Option<String>> {
-    Ok(Input::with_theme(&ColorfulTheme::default())
-        .with_prompt(prompt)
-        .default("_".into())
-        .interact()
-        .map(|s: String| (s != "_".to_string()).then(|| s))?)
 }
 
 fn collect_ferret_info() -> Result<ImageInfo> {

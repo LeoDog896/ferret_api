@@ -56,6 +56,8 @@ pub struct BiologicalInfo {
     pub sex: Option<Sex>,
     pub color: Option<Color>,
     pub pattern: Option<Pattern>,
+    /// The alternative description for the image.
+    pub alt: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
