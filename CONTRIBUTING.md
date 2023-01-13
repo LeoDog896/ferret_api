@@ -21,4 +21,8 @@ To ensure that your image is under 300kb, go to the directory changed, and run `
 
 ## Auto-image optimization
 
-TODO
+If you want control over your optimization, install [jpegoptim](https://github.com/tjko/jpegoptim):
+
+```sh
+sudo apt install jpegoptim
+```

@@ -63,11 +63,11 @@ fn collect_ferret_info() -> Result<ImageInfo> {
     if is_public_domain {
         let author = optional_input("Original author's name (optional)")?;
 
-        return Ok(ImageInfo::PublicDomain {
+        Ok(ImageInfo::PublicDomain {
             info: bio,
             author,
             source,
-        });
+        })
     } else {
         let author: String = Input::with_theme(&ColorfulTheme::default())
             .with_prompt("Original author's name")
@@ -75,12 +75,12 @@ fn collect_ferret_info() -> Result<ImageInfo> {
 
         let license = enum_select::<License>("License")?;
 
-        return Ok(ImageInfo::Licensed {
+        Ok(ImageInfo::Licensed {
             info: bio,
             author,
             license,
             source,
-        });
+        })
     }
 }
 

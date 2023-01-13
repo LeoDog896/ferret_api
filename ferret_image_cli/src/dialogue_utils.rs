@@ -42,5 +42,5 @@ pub fn optional_input(prompt: &str) -> Result<Option<String>> {
         .with_prompt(prompt)
         .default("_".into())
         .interact()
-        .map(|s: String| (s != "_".to_string()).then(|| s))?)
+        .map(|s: String| (s != "_").then_some(s))?)
 }
