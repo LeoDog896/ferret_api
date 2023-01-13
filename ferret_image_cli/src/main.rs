@@ -96,7 +96,9 @@ fn main() -> Result<()> {
                 // source is a file
                 Box::new(BufReader::new(std::fs::File::open(&source)?))
             } else if reqwest::Url::parse(&source).is_ok() {
-                let bytes = reqwest::blocking::get(&source)?.bytes()?;
+                let request = reqwest::blocking::get(&source)?;
+                println!("Request code is {}", request.status());
+                let bytes = request.bytes()?;
                 Box::new(Cursor::new(bytes.to_vec()))
             } else {
                 println!("Source must be a file or URL");
