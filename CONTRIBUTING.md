@@ -19,6 +19,8 @@ cargo run --bin ferret_image_cli -- create --source <url>
 
 To ensure that your image is under 300kb, go to the directory changed, and run `du -h <file>`. Please make sure to [Optimize your images](#image-optimization).
 
+Once you have made your contribution, make a commit, and inside the `ferret_images` directory, if you're working as a submodule, run `git push origin HEAD:<branch>`. Once you're done, make a pull reqest!
+
 ## Image optimization
 
 Install [jpegoptim](https://github.com/tjko/jpegoptim), and if you (most likely) want to resize, [imagemagick](https://imagemagick.org/index.php):
