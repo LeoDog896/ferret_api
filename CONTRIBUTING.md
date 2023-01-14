@@ -14,7 +14,7 @@ Once you have the project cloned (with submodules), use `cargo run --bin ferret_
 For example, here's the command to download an image from a URL for submissions:
 
 ```sh
-cargo run --bin ferret_image_cli -- create --source <url>
+cargo run --bin ferret_image_cli -- create <url>
 ```
 
 To ensure that your image is under 300kb, go to the directory changed, and run `du -h <file>`. Please make sure to [Optimize your images](#image-optimization).

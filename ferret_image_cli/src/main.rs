@@ -22,7 +22,6 @@ enum Subcommand {
     /// Creates a ferret image
     Create {
         /// The source image file / URL
-        #[clap(short, long)]
         source: String,
     },
     /// Verifies the /images directory
@@ -134,7 +133,7 @@ fn main() -> Result<()> {
             let mut metadata_file = std::fs::File::create(&metadata_path)?;
             serde_json::to_writer_pretty(&mut metadata_file, &ferret_info)?;
 
-            println!("Done! PR your new changes!");
+            println!("Done! Check the file size (du -h ferret_images) and PR your new changes!");
         }
         Subcommand::Verify => {
             println!("Verify");
