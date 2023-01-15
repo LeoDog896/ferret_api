@@ -141,7 +141,7 @@ fn main() -> Result<()> {
             let mut metadata_file = std::fs::File::create(&metadata_path)?;
             serde_json::to_writer_pretty(&mut metadata_file, &ferret_info)?;
 
-            println!("Done! Check the file size (du -h ferret_images) and PR your new changes!");
+            println!("Done! Check that the file size is <300k (du -h ferret_images/collection/{}/**) and PR your new changes!", id);
         }
         Subcommand::Verify => {
             println!("Verify");
