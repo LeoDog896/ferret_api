@@ -1,0 +1,23 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/** The container will have a bunch of random-sized images. Make it flex and fit. */
+div#container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+/** The images won't be the same size. Don't let them stretch. */
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}

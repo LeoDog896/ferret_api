@@ -91,6 +91,14 @@ fn main() -> Result<()> {
 
     match args.subcommand {
         Subcommand::Create { source } => {
+            // Check if jpegoptim is installed
+            println!("Checking if jpegoptim is installed...");
+            let jpegoptim = which::which("jpegoptim");
+            if jpegoptim.is_err() {
+                println!("jpegoptim is not installed. Please install it to continue.");
+                std::process::exit(1);
+            }
+            
             let mut file: Box<dyn BufReadSeek> = if std::path::Path::new(&source).exists() {
                 // source is a file
                 Box::new(BufReader::new(std::fs::File::open(&source)?))
@@ -130,7 +138,7 @@ fn main() -> Result<()> {
 
             // then save the image to the image file
             println!("Saving...");
-            image.save(image_path)?;
+            image.save(&image_path)?;
 
             let ferret_info = collect_ferret_info()?;
 
@@ -141,7 +149,24 @@ fn main() -> Result<()> {
             let mut metadata_file = std::fs::File::create(&metadata_path)?;
             serde_json::to_writer_pretty(&mut metadata_file, &ferret_info)?;
 
-            println!("Done! Check that the file size is <300k (du -h ferret_images/collection/{}/**) and PR your new changes!", id);
+            // Run jpegotim on the image
+            println!("Optimizing image...");
+            let output = std::process::Command::new("jpegoptim")
+                .arg(&image_path)
+                .output()?;
+            if !output.status.success() {
+                println!("Error optimizing image: {}", String::from_utf8_lossy(&output.stderr));
+                std::fs::remove_dir_all(&ferret_path)?;
+                std::process::exit(1);
+            }
+
+            // Check the file size -- warn if over 300k
+            let file_size = std::fs::metadata(&image_path)?.len();
+            if file_size > 1024 * 300 {
+                eprintln!("WARNING: File size is over 300k ({} bytes). You may need to resize your images.", file_size);
+            }
+
+            println!("Done! PR your new changes!");
         }
         Subcommand::Verify => {
             println!("Verify");
