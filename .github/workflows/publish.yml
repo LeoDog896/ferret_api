@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: '16.x'
       - name: Test Build
-      - working-directory: www
+        working-directory: www
         run: |
           yarn install
           yarn build
@@ -43,10 +43,10 @@ jobs:
         with:
           node-version: '16.x'
       - name: Install Dependencies
-      - working-directory: www
+        working-directory: www
         run: yarn install
       - name: Build Project
-      - working-directory: www
+        working-directory: www
         run: yarn build
       - name: Setup Pages
         uses: actions/configure-pages@v2
