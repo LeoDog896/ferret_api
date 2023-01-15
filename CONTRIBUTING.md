@@ -19,7 +19,9 @@ cargo run --bin ferret_image_cli -- create <url>
 
 To ensure that your image is under 300kb, go to the directory changed, and run `du -h <file>`. Please make sure to [Optimize your images](#image-optimization).
 
-Once you have made your contribution, make a commit, and inside the `ferret_images` directory, if you're working as a submodule, run `git push origin HEAD:<branch>`. Once you're done, make a pull reqest!
+Once you have made your contribution, make a commit, and inside the `ferret_images` directory,
+(because if you don't, you'll get the following error: `fatal: You are not currently on a branch.`)
+if you're working as a submodule, run `git push origin HEAD:<branch>`. Once you're done, make a pull reqest!
 
 ## Image optimization
 
