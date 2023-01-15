@@ -31,7 +31,7 @@ const parsedFiles = fileSchema.safeParse(files);
 console.log(parsedFiles);
 
 if (parsedFiles.success) {
-  document.title = `Ferrets (${Object.keys(parsedFiles.data).length})`
+  document.title = `Ferrets (${Object.keys(parsedFiles.data).length})`;
   for (const [
     key,
     { "image.jpg": image, "image.json": json },
