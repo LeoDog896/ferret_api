@@ -165,7 +165,7 @@ fn main() -> Result<()> {
             if file_size > 1024 * 300 {
                 eprintln!("WARNING: File size is over 300k ({} bytes). You may need to resize your images.", file_size);
             } else {
-                println!("File size is {} bytes", file_size);
+                println!("File size is {}kb", file_size / 1024);
             }
 
             println!("Done! PR your new changes!");
