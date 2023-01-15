@@ -152,6 +152,8 @@ fn main() -> Result<()> {
             // Run jpegotim on the image
             println!("Optimizing image...");
             let output = std::process::Command::new("jpegoptim")
+                .arg("--strip-all")
+                .arg("--all-progressive")
                 .arg(&image_path)
                 .output()?;
             if !output.status.success() {

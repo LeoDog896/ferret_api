@@ -22,7 +22,7 @@ main() {
     IFS='
     '
     set -f
-    for i in $(find ../ferret_images -name '*.jpg'); do jpegoptim --size 300 --strip-all "$i"; done
+    for i in $(find ../ferret_images -name '*.jpg'); do jpegoptim --size 300 --strip-all --all-progressive "$i"; done
 }
 
 main "$@"
