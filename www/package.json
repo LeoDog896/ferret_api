@@ -6,9 +6,11 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "parcel": "^2.8.2"
+    "parcel": "^2.8.2",
+    "zod": "^3.20.2"
   },
   "devDependencies": {
+    "@parcel/resolver-glob": "^2.8.2",
     "prettier": "2.8.2"
   }
 }

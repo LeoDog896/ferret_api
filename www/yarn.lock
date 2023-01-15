@@ -481,6 +481,17 @@
     "@parcel/node-resolver-core" "2.8.2"
     "@parcel/plugin" "2.8.2"
 
+"@parcel/resolver-glob@^2.8.2":
+  version "2.8.2"
+  resolved "https://registry.yarnpkg.com/@parcel/resolver-glob/-/resolver-glob-2.8.2.tgz#4f4c5a0e24d0c0e303565e412bd48621f1db18d1"
+  integrity sha512-Z6p3UF6axBEtjRGnQBkXnEbx/RC6vSp03bO5rRznBOqUqm+0V1aVYZJzGQZxvGAhcBq0xLkUNssts1c9q16lNQ==
+  dependencies:
+    "@parcel/diagnostic" "2.8.2"
+    "@parcel/node-resolver-core" "2.8.2"
+    "@parcel/plugin" "2.8.2"
+    "@parcel/utils" "2.8.2"
+    nullthrows "^1.1.1"
+
 "@parcel/runtime-browser-hmr@2.8.2":
   version "2.8.2"
   resolved "https://registry.yarnpkg.com/@parcel/runtime-browser-hmr/-/runtime-browser-hmr-2.8.2.tgz#b927aeba5bf76ec43731caf9c11cd09f504304e1"
@@ -1458,3 +1469,8 @@ yaml@^1.10.0:
   version "1.10.2"
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.2.tgz#2301c5ffbf12b467de8da2333a459e29e7920e4b"
   integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
+
+zod@^3.20.2:
+  version "3.20.2"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.20.2.tgz#068606642c8f51b3333981f91c0a8ab37dfc2807"
+  integrity sha512-1MzNQdAvO+54H+EaK5YpyEy0T+Ejo/7YLHS93G3RnYWh5gaotGHwGeN/ZO687qEDU2y4CdStQYXVHIgrUl5UVQ==
