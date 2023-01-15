@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html --public-url ./",
+    "build": "parcel build index.html --public-url /ferret-api",
     "format": "prettier --write ."
   },
   "dependencies": {
