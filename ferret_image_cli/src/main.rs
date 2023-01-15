@@ -118,7 +118,15 @@ fn main() -> Result<()> {
             println!("Converting image to JPG (if applicable)");
             let image = image::io::Reader::new(&mut file)
                 .with_guessed_format()?
-                .decode()?;
+                .decode();
+
+            if image.is_err() {
+                println!("Error decoding image: {}", image.err().unwrap());
+                std::fs::remove_dir_all(&ferret_path)?;
+                std::process::exit(1);
+            }
+
+            let image = image.unwrap();
 
             // then save the image to the image file
             println!("Saving...");
