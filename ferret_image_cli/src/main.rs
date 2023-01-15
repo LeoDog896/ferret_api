@@ -173,7 +173,56 @@ fn main() -> Result<()> {
             println!("Done! PR your new changes!");
         }
         Subcommand::Verify => {
-            println!("Verify");
+            // First, check if the collections directory exists
+            let collections_path = std::path::Path::new("./ferret_images/collection");
+            if !collections_path.exists() {
+                eprintln!("No collections directory found. Did you clone the submodules?");
+                std::process::exit(1);
+            }
+
+            // Then, loop through all the directories
+            for entry in std::fs::read_dir(collections_path)? {
+                let entry = entry?;
+                let path = entry.path();
+                if path.is_dir() {
+                    // Check if the image exists
+                    let mut image_path = path.clone();
+                    image_path.push("image.jpg");
+                    if !image_path.exists() {
+                        eprintln!("Image does not exist for {}", path.display());
+                        std::process::exit(1);
+                    }
+
+                    // Check if the metadata exists
+                    let mut metadata_path = path.clone();
+                    metadata_path.push("image.json");
+                    if !metadata_path.exists() {
+                        eprintln!("Metadata does not exist for {}", path.display());
+                        std::process::exit(1);
+                    }
+
+                    // Check if the metadata is an ImageInfo struct
+                    let metadata = std::fs::read_to_string(&metadata_path)?;
+                    let is_valid = serde_json::from_str::<ImageInfo>(&metadata);
+                    if is_valid.is_err() {
+                        eprintln!("Metadata is not valid for {}", path.display());
+                        std::process::exit(1);
+                    }
+
+                    // Check if the image is a valid JPEG
+                    let image = image::io::Reader::open(&image_path)?
+                        .with_guessed_format()?
+                        .decode()?;
+                    if image.color() != image::ColorType::Rgb8 {
+                        eprintln!("Image is not RGB8 for {}", path.display());
+                        std::process::exit(1);
+                    }
+                }
+
+                println!("Verified {}", path.display());
+            }
+
+            println!("All images verified!");
         }
     };
 
