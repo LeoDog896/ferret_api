@@ -4,6 +4,7 @@
 	import { ferretInfo, type FerretInfo } from '$lib/info';
 	import { getContext } from 'svelte';
 	import ImagePrompt from '$lib/ImagePrompt.svelte';
+    import zod from "zod"
 
 	const { open } = getContext('simple-modal') as any;
 	const showInfo = (data: FerretInfo, img: string) => open(ImagePrompt, { data, img });
@@ -43,16 +44,17 @@
 		{#await img then awaitedImg}
 			{#await meta then awaitedMeta}
 				{@const info = ferretInfo.parse(awaitedMeta)}
+                {@const image = zod.object({ default: zod.string() }).parse(awaitedImg).default}
 				<li>
 					<img
 						alt={info.info.alt}
 						on:keypress={(event) => {
 							if (event.key === 'Enter') {
-								showInfo(info);
+								showInfo(info, image);
 							}
 						}}
-						on:click={() => showInfo(info, awaitedImg.default)}
-						src={awaitedImg.default}
+						on:click={() => showInfo(info, image)}
+						src={image}
 					/>
 				</li>
 			{/await}
