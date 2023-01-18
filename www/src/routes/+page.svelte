@@ -23,7 +23,6 @@
     onMount(() => {
         document.title = `Ferret Images (${Object.keys(pairs).length})`
     })
-    
 </script>
 
 <ul>
