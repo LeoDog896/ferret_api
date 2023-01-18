@@ -33,3 +33,30 @@
     {/each}
     <li></li>
 </ul>
+
+<style>
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        flex-grow: 1;
+    }
+
+    img {
+        max-height: 100%;
+        min-width: 100%;
+        height: 10rem;
+        object-fit: cover;
+        vertical-align: bottom;
+    }
+
+    li:last-child {
+    flex-grow: 10;
+    }
+
+</style>
