@@ -11,7 +11,8 @@ export const ferretInfo = zod.object({
 		alt: optionalNullableString
 	}),
 	author: optionalNullableString,
-	source: optionalNullableString
+	source: optionalNullableString,
+	license: optionalNullableString
 });
 
 export type FerretInfo = zod.infer<typeof ferretInfo>;

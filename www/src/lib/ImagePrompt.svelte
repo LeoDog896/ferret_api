@@ -28,6 +28,12 @@
     <p>Ferret's Pattern: {data.info.pattern}</p>
 {/if}
 
+{#if data.license}
+    <p>License: {data.license}</p>
+{:else}
+    <p>License: CC0 / Public Domain</p>
+{/if}
+
 <style>
     p {
         font-family: Roboto;
