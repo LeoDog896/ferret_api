@@ -55,10 +55,14 @@
         height: 10rem;
         object-fit: cover;
         vertical-align: bottom;
+        
+        transition: all 0.2s;
 
-        transition: transform 0.2s;
+        // Hover indication
         &:hover {
             transform: scale(1.05);
+            box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.1);
+            cursor: pointer;
         }
     }
 
