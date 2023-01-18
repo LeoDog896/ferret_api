@@ -35,17 +35,17 @@
 </ul>
 
 <style lang="scss">
+
     ul {
         display: flex;
         flex-wrap: wrap;
         list-style: none;
+        margin: 0.5rem;
         padding: 0;
-        margin: 0 0.5rem;
     }
 
     li {
         flex-grow: 1;
-        // equal gap (0.5rem on each side)
         padding: 0.5rem;
     }
 
@@ -55,7 +55,7 @@
         height: 10rem;
         object-fit: cover;
         vertical-align: bottom;
-        
+
         transition: all 0.2s;
 
         // Hover indication
