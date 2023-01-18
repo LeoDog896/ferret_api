@@ -90,7 +90,18 @@
 	#container {
 		display: flex;
 		flex-direction: col;
-	}
+        flex-wrap: wrap;
+    }
+    
+    @media (max-width: 600px) {
+        #container {
+            flex-direction: row;
+        }
+
+        img {
+            width: 100%;
+        }
+    }
 
 	img {
 		margin-right: 2rem;
