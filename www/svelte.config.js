@@ -10,7 +10,7 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		paths: {
-			base: "/ferret_api"
+			base: '/ferret_api'
 		}
 	}
 };
