@@ -34,17 +34,19 @@
     <li></li>
 </ul>
 
-<style>
+<style lang="scss">
     ul {
         display: flex;
         flex-wrap: wrap;
         list-style: none;
         padding: 0;
-        margin: 0;
+        margin: 0 0.5rem;
     }
 
     li {
         flex-grow: 1;
+        // equal gap (0.5rem on each side)
+        padding: 0.5rem;
     }
 
     img {
@@ -53,10 +55,15 @@
         height: 10rem;
         object-fit: cover;
         vertical-align: bottom;
+
+        transition: transform 0.2s;
+        &:hover {
+            transform: scale(1.05);
+        }
     }
 
     li:last-child {
-    flex-grow: 10;
+        flex-grow: 10;
     }
 
 </style>
