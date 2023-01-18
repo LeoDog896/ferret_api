@@ -12,7 +12,17 @@ export const ferretInfo = zod.object({
 	}),
 	author: optionalNullableString,
 	source: optionalNullableString,
-	license: optionalNullableString
+	license: zod
+		.enum([
+			'Attribution',
+			'AttributionShareAlike',
+			'AttributionNoDerivatives',
+			'AttributionNonCommercial',
+			'AttributionNonCommercialShareAlike',
+			'AttributionNonCommercialNoDerivatives'
+		])
+		.nullable()
+		.optional()
 });
 
 export type FerretInfo = zod.infer<typeof ferretInfo>;
