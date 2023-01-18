@@ -1,6 +1,21 @@
 <script lang="ts">
 	import { onMount } from "svelte";
     import "../index.css"
+    import zod from "zod"
+
+    const ferretInfo = zod.object({
+        info: zod.object({
+            name: zod.string(),
+            sex: zod.string(),
+            color: zod.string(),
+            pattern: zod.string(),
+            alt: zod.string()
+        }),
+        author: zod.string(),
+        source: zod.string()
+    })
+
+    type FerretInfo = zod.infer<typeof ferretInfo>
 
     function assert(condition: boolean, message: string) {
         if (!condition) {
