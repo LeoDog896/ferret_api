@@ -1,7 +1,7 @@
 <script>
-    import Modal from 'svelte-simple-modal';
+	import Modal from 'svelte-simple-modal';
 </script>
 
 <Modal>
-    <slot></slot>
+	<slot />
 </Modal>
