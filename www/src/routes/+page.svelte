@@ -6,7 +6,7 @@
 	import ImagePrompt from '$lib/ImagePrompt.svelte';
 
 	const { open } = getContext('simple-modal') as any;
-	const showInfo = (data: FerretInfo) => open(ImagePrompt, { data });
+	const showInfo = (data: FerretInfo, img: string) => open(ImagePrompt, { data, img });
 
 	function assert(condition: boolean, message: string) {
 		if (!condition) {
@@ -51,7 +51,7 @@
 								showInfo(info);
 							}
 						}}
-						on:click={() => showInfo(info)}
+						on:click={() => showInfo(info, awaitedImg.default)}
 						src={awaitedImg.default}
 					/>
 				</li>
