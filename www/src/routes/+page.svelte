@@ -3,16 +3,18 @@
     import "../index.css"
     import zod from "zod"
 
+    const optionalNullableString = zod.string().nullable().optional();
+
     const ferretInfo = zod.object({
         info: zod.object({
-            name: zod.string(),
-            sex: zod.string(),
-            color: zod.string(),
-            pattern: zod.string(),
-            alt: zod.string()
+            name: optionalNullableString,
+            sex: optionalNullableString,
+            color: optionalNullableString,
+            pattern: optionalNullableString,
+            alt: optionalNullableString
         }),
-        author: zod.string(),
-        source: zod.string()
+        author: optionalNullableString,
+        source: optionalNullableString
     })
 
     type FerretInfo = zod.infer<typeof ferretInfo>
@@ -46,6 +48,7 @@
         {@const meta = pair.metadata()}
         {#await img then awaitedImg}
             {#await meta then awaitedMeta}
+                {@const info = ferretInfo.parse(awaitedMeta)}
                 <li><img src={awaitedImg.default} /></li>
             {/await}
         {/await}
