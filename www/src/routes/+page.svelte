@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from "svelte";
     import "../index.css"
 
     function assert(condition: boolean, message: string) {
@@ -18,6 +19,10 @@
         const uuid = key.split("/").slice(-2)[0]
         return [uuid, {image: value, metadata: metadata[`${key.slice(0, -3)}json`]}]
     }))
+
+    onMount(() => {
+        document.title = `Ferret Images (${Object.keys(pairs).length})`
+    })
     
 </script>
 
