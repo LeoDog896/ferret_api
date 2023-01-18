@@ -1,23 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
     import "../index.css"
-    import zod from "zod"
-
-    const optionalNullableString = zod.string().nullable().optional();
-
-    const ferretInfo = zod.object({
-        info: zod.object({
-            name: optionalNullableString,
-            sex: optionalNullableString,
-            color: optionalNullableString,
-            pattern: optionalNullableString,
-            alt: optionalNullableString
-        }),
-        author: optionalNullableString,
-        source: optionalNullableString
-    })
-
-    type FerretInfo = zod.infer<typeof ferretInfo>
+    import { ferretInfo } from "$lib/info";
 
     function assert(condition: boolean, message: string) {
         if (!condition) {
