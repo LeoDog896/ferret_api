@@ -2,7 +2,7 @@
 
 a little API for fetching the snoodliest of ferrets (all ferrets are welcome!)
 
-Want to add images instead? Use the [`ferret_images`](https://github.com/LeoDog896/ferret_images) repository instead for contribution. Image contribution guidelines are available there, or with the `ferret_image` cli.
+> **Note** Looking to add images? Use the [`ferret_images`](https://github.com/LeoDog896/ferret_images) repository instead for contribution. (ferret!)-friendly contribution guidelines are available there.
 
 ## Contributing
 
