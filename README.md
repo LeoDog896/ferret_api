@@ -2,7 +2,7 @@
 
 a little API for fetching the snoodliest of ferrets (all ferrets are welcome!)
 
-not a developer and just want to look at some ferrets? check out the [website](https://leodog896.github.io/ferret_api)!
+not a developer and just want to look at some ferrets? check out the [website](https://leodog896.github.io/ferret_api/business)!
 
 > **Note** Looking to add images? Use the [`ferret_images`](https://github.com/LeoDog896/ferret_images) repository instead for contribution. (ferret!)-friendly contribution guidelines are available there.
 
