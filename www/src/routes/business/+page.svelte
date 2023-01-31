@@ -89,7 +89,7 @@
 		// Hover indication
 		&:hover {
 			transform: scale(1.05);
-			box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.1);
+			box-shadow: 0 0 0.1rem 0.1rem rgba(0, 0, 0, 0.1);
 			cursor: pointer;
 		}
 	}
