@@ -6,11 +6,6 @@
 	export let data: FerretInfo;
 	export let img: string;
 
-    interface LicenseData {
-        url: string;
-        name: string;
-    }
-
     export function parseLicense(license: License) {
         switch(license) {
             case "Attribution":
@@ -58,7 +53,7 @@
 		{/if}
 
 		{#if data.author}
-			<p>Made by: {data.author}</p>
+			<p>Picture by: {data.author}</p>
 		{/if}
 
 		{#if data.info.name}

@@ -1,9 +1,5 @@
 [workspace]
 
 members = [
-    "ferret_server",
-    "ferret_image",
-    "ferret_image_cli",
-    "ferret_cli",
-    "ferret_api"
+    "crates/*"
 ]

@@ -1,0 +1,19 @@
+[package]
+name = "ferret_image_cli"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4.0", features = ["derive"] }
+dialoguer = "0.11"
+ferret_image = { path = "../ferret_image" }
+image = "0.25"
+reqwest = { version = "0.12", features = ["blocking"] }
+seek_bufread = "1.2"
+serde_json = "1"
+strum = { version = "0.26", features = ["derive"] }
+uuid = { version = "1.2.2", features = ["v4"] }
+which = "6.0"

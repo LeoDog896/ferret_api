@@ -4,6 +4,7 @@ use strum_macros::{Display, EnumIter};
 /// Colors of a ferret.
 /// Referenced from https://www.ferret.org/pdfs/Ferret_Colors_and_Patterns.pdf
 #[derive(Serialize, Deserialize, Debug, PartialEq, EnumIter, Display)]
+#[non_exhaustive]
 pub enum Color {
     Albino,
     Black,
@@ -18,6 +19,7 @@ pub enum Color {
 /// Patterns of a ferret.
 /// Referenced from https://www.ferret.org/pdfs/Ferret_Colors_and_Patterns.pdf
 #[derive(Serialize, Deserialize, Debug, PartialEq, EnumIter, Display)]
+#[non_exhaustive]
 pub enum Pattern {
     Blaze,
     Mitt,
@@ -39,6 +41,7 @@ pub enum Sex {
 /// All creative commons licenses.
 /// Referenced from https://creativecommons.org/about/cclicenses/
 #[derive(Serialize, Deserialize, Debug, PartialEq, EnumIter, Display)]
+#[non_exhaustive]
 pub enum License {
     Attribution,
     AttributionShareAlike,
