@@ -1,12 +1,12 @@
 mod dialogue_utils;
 
-use anyhow::Result;
+use anyhow::{bail, Context, Result};
 use clap::Parser;
 use dialogue_utils::*;
 use dialoguer::{theme::ColorfulTheme, Confirm, Input};
 use ferret_image::{BiologicalInfo, Color, ImageInfo, License, Pattern, Sex};
 use seek_bufread::BufReader;
-use std::io::{BufRead, Cursor, Seek};
+use std::{fs::read_dir, io::{BufRead, Cursor, Seek}, path::Path, process::Command};
 use uuid::Uuid;
 
 /// Simple program to greet a person
@@ -26,6 +26,8 @@ enum Subcommand {
     },
     /// Verifies the /images directory
     Verify,
+    /// Get general statistics on stored images
+    Statistics
 }
 
 fn biologocal_info() -> Result<BiologicalInfo> {
@@ -87,17 +89,21 @@ trait BufReadSeek: BufRead + Seek {}
 impl<T: BufRead + Seek> BufReadSeek for T {}
 
 fn main() -> Result<()> {
+    let collections_path = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap().parent().unwrap().join("ferret_images").join("collection");
     let args = Args::parse();
+
+    // First, check if the collections directory exists
+    if !collections_path.exists() {
+        eprintln!("No collections directory found. Did you clone the submodules?");
+        std::process::exit(1);
+    }
 
     match args.subcommand {
         Subcommand::Create { source } => {
             // Check if jpegoptim is installed
             println!("Checking if jpegoptim is installed...");
-            let jpegoptim = which::which("jpegoptim");
-            if jpegoptim.is_err() {
-                println!("jpegoptim is not installed. Please install it to continue.");
-                std::process::exit(1);
-            }
+            which::which("jpegoptim")
+                .context("jpegoptim is not installed. Please install it to continue.")?;
             
             let mut file: Box<dyn BufReadSeek> = if std::path::Path::new(&source).exists() {
                 // source is a file
@@ -115,7 +121,7 @@ fn main() -> Result<()> {
             let id = Uuid::new_v4();
             println!("UUID is {id}");
 
-            let mut ferret_path = std::path::PathBuf::from("./ferret_images/collection");
+            let mut ferret_path = collections_path;
             ferret_path.push(id.to_string());
             std::fs::create_dir_all(&ferret_path)?;
 
@@ -126,15 +132,8 @@ fn main() -> Result<()> {
             println!("Converting image to JPG (if applicable)");
             let image = image::io::Reader::new(&mut file)
                 .with_guessed_format()?
-                .decode();
-
-            if image.is_err() {
-                println!("Error decoding image: {}", image.err().unwrap());
-                std::fs::remove_dir_all(&ferret_path)?;
-                std::process::exit(1);
-            }
-
-            let image = image.unwrap();
+                .decode()
+                .context("Error decoding image")?;
 
             // then save the image to the image file
             println!("Saving...");
@@ -151,15 +150,15 @@ fn main() -> Result<()> {
 
             // Run jpegotim on the image
             println!("Optimizing image...");
-            let output = std::process::Command::new("jpegoptim")
+            let output = Command::new("jpegoptim")
                 .arg("--strip-all")
                 .arg("--all-progressive")
                 .arg(&image_path)
                 .output()?;
+            
             if !output.status.success() {
-                println!("Error optimizing image: {}", String::from_utf8_lossy(&output.stderr));
                 std::fs::remove_dir_all(&ferret_path)?;
-                std::process::exit(1);
+                bail!("Error optimizing image: {}", String::from_utf8_lossy(&output.stderr));
             }
 
             // Check the file size -- warn if over 300k
@@ -173,15 +172,8 @@ fn main() -> Result<()> {
             println!("Done! PR your new changes!");
         }
         Subcommand::Verify => {
-            // First, check if the collections directory exists
-            let collections_path = std::path::Path::new("./ferret_images/collection");
-            if !collections_path.exists() {
-                eprintln!("No collections directory found. Did you clone the submodules?");
-                std::process::exit(1);
-            }
-
-            // Then, loop through all the directories
-            for entry in std::fs::read_dir(collections_path)? {
+            // Loop through all the directories
+            for entry in read_dir(collections_path)? {
                 let entry = entry?;
                 let path = entry.path();
                 if path.is_dir() {
@@ -223,6 +215,11 @@ fn main() -> Result<()> {
             }
 
             println!("All images verified!");
+        },
+        Subcommand::Statistics => {
+            let count = read_dir(collections_path)?.count();
+
+            println!("Image count: {}", count);
         }
     };
 
