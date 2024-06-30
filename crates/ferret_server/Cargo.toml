@@ -5,9 +5,11 @@ edition = "2021"
 
 [dependencies]
 actix-web = "4"
+ferret_image = { version = "0.1.0", path = "../ferret_image" }
 include_dir = "0.7.4"
 notify = "6.0"
 rand = "0.8.5"
 serde = { version = "1.0.203", features = ["derive"] }
+serde_json = "1.0.118"
 thiserror = "1.0.61"
 uuid = "1.2"

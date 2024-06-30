@@ -826,10 +826,12 @@ name = "ferret_server"
 version = "0.1.0"
 dependencies = [
  "actix-web",
+ "ferret_image",
  "include_dir",
  "notify",
  "rand",
  "serde",
+ "serde_json",
  "thiserror",
  "uuid",
 ]
