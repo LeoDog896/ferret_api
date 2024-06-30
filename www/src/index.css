@@ -3,4 +3,27 @@ body {
 	padding: 0;
 	margin: 0;
 	width: 100%;
+	background-color: #ECD9CA;
+	color: #170A1C;
+}
+
+:root {
+	--hot: #F92A82;
+	--cold: #1C6E8C;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Schoolbell', cursive;
+}
+
+p {
+	font-family: 'Comic Neue', cursive;
+}
+
+.hot {
+	color: var(--hot);
+}
+
+.cold {
+	color: var(--cold);
 }

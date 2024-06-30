@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import '../../index.css';
 	import { ferretInfo, type FerretInfo } from '$lib/info';
 	import { getContext } from 'svelte';
 	import ImagePrompt from '$lib/ImagePrompt.svelte';
