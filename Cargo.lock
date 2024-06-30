@@ -829,6 +829,7 @@ dependencies = [
  "ferret_image",
  "include_dir",
  "notify",
+ "once_cell",
  "rand",
  "serde",
  "serde_json",
@@ -2702,6 +2703,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5de17fd2f7da591098415cff336e12965a28061ddace43b59cb3c430179c9439"
 dependencies = [
  "getrandom",
+ "serde",
 ]
 
 [[package]]

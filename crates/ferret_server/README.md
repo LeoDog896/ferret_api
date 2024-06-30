@@ -14,3 +14,6 @@ Root for the following queries will be in `/v1/`:
 
 `data/uuid/<uuid>`: search a ferret's image by UUID
 `data/random`: gets a random ferret's image.
+
+
+`list`: get the list of every single ferret UUID
