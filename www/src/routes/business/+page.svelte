@@ -3,7 +3,7 @@
 	import { ferretInfo, type FerretInfo } from '$lib/info';
 	import { getContext } from 'svelte';
 	import ImagePrompt from '$lib/ImagePrompt.svelte';
-    import zod from "zod"
+	import zod from 'zod';
 
 	const { open } = getContext('simple-modal') as any;
 	const showInfo = (data: FerretInfo, img: string) => open(ImagePrompt, { data, img });
@@ -43,7 +43,7 @@
 		{#await img then awaitedImg}
 			{#await meta then awaitedMeta}
 				{@const info = ferretInfo.parse(awaitedMeta)}
-                {@const image = zod.object({ default: zod.string() }).parse(awaitedImg).default}
+				{@const image = zod.object({ default: zod.string() }).parse(awaitedImg).default}
 				<li>
 					<img
 						alt={info.info.alt}

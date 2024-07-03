@@ -1,48 +1,47 @@
 <script lang="ts">
 	import type { FerretInfo } from './info';
 
-    type License = FerretInfo["info"]["license"];
+	type License = FerretInfo['info']['license'];
 
 	export let data: FerretInfo;
 	export let img: string;
 
-    export function parseLicense(license: License) {
-        switch(license) {
-            case "Attribution":
-                return { 
-                    url: "https://creativecommons.org/licenses/by/3.0/us/",
-                    name: "CC BY"
-                }
-            case "AttributionShareAlike":
-                return { 
-                    url: "https://creativecommons.org/licenses/by-sa/3.0/us/",
-                    name: "CC BY-SA"
-                }
-            case "AttributionNoDerivatives":
-                return { 
-                    url: "https://creativecommons.org/licenses/by-nd/3.0/us/",
-                    name: "CC BY-ND"
-                }
-            case "AttributionNonCommercial":
-                return { 
-                    url: "https://creativecommons.org/licenses/by-nc/3.0/us/",
-                    name: "CC BY-NC"
-                }
-            case "AttributionNonCommercialShareAlike":
-                return { 
-                    url: "https://creativecommons.org/licenses/by-nc-sa/3.0/us/",
-                    name: "CC BY-NC-SA"
-                }
-            case "AttributionNonCommercialNoDerivatives":
-                return { 
-                    url: "https://creativecommons.org/licenses/by-nc-nd/3.0/us/",
-                    name: "CC BY-NC-ND"
-                }
+	export function parseLicense(license: License) {
+		switch (license) {
+			case 'Attribution':
+				return {
+					url: 'https://creativecommons.org/licenses/by/3.0/us/',
+					name: 'CC BY'
+				};
+			case 'AttributionShareAlike':
+				return {
+					url: 'https://creativecommons.org/licenses/by-sa/3.0/us/',
+					name: 'CC BY-SA'
+				};
+			case 'AttributionNoDerivatives':
+				return {
+					url: 'https://creativecommons.org/licenses/by-nd/3.0/us/',
+					name: 'CC BY-ND'
+				};
+			case 'AttributionNonCommercial':
+				return {
+					url: 'https://creativecommons.org/licenses/by-nc/3.0/us/',
+					name: 'CC BY-NC'
+				};
+			case 'AttributionNonCommercialShareAlike':
+				return {
+					url: 'https://creativecommons.org/licenses/by-nc-sa/3.0/us/',
+					name: 'CC BY-NC-SA'
+				};
+			case 'AttributionNonCommercialNoDerivatives':
+				return {
+					url: 'https://creativecommons.org/licenses/by-nc-nd/3.0/us/',
+					name: 'CC BY-NC-ND'
+				};
+		}
 
-        }
-
-        throw Error("Unknown license")
-    }
+		throw Error('Unknown license');
+	}
 </script>
 
 <div id="container">
@@ -73,7 +72,7 @@
 		{/if}
 
 		{#if data.license}
-            {@const parsedLicense = parseLicense(data.license)}
+			{@const parsedLicense = parseLicense(data.license)}
 			<p>License: <a href={parsedLicense.url}>{parsedLicense.name}</a></p>
 		{:else}
 			<p>License: CC0 / Public Domain</p>
@@ -85,18 +84,18 @@
 	#container {
 		display: flex;
 		flex-direction: col;
-        flex-wrap: wrap;
-    }
-    
-    @media (max-width: 600px) {
-        #container {
-            flex-direction: row;
-        }
+		flex-wrap: wrap;
+	}
 
-        img {
-            width: 100%;
-        }
-    }
+	@media (max-width: 600px) {
+		#container {
+			flex-direction: row;
+		}
+
+		img {
+			width: 100%;
+		}
+	}
 
 	img {
 		margin-right: 2rem;

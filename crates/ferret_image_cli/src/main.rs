@@ -6,7 +6,12 @@ use dialogue_utils::*;
 use dialoguer::{theme::ColorfulTheme, Confirm, Input};
 use ferret_image::{BiologicalInfo, Color, ImageInfo, License, Pattern, Sex};
 use seek_bufread::BufReader;
-use std::{fs::read_dir, io::{BufRead, Cursor, Seek}, path::Path, process::Command};
+use std::{
+    fs::read_dir,
+    io::{BufRead, Cursor, Seek},
+    path::Path,
+    process::Command,
+};
 use uuid::Uuid;
 
 /// Simple program to greet a person
@@ -27,7 +32,7 @@ enum Subcommand {
     /// Verifies the /images directory
     Verify,
     /// Get general statistics on stored images
-    Statistics
+    Statistics,
 }
 
 fn biologocal_info() -> Result<BiologicalInfo> {
@@ -89,7 +94,13 @@ trait BufReadSeek: BufRead + Seek {}
 impl<T: BufRead + Seek> BufReadSeek for T {}
 
 fn main() -> Result<()> {
-    let collections_path = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap().parent().unwrap().join("ferret_images").join("collection");
+    let collections_path = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .unwrap()
+        .parent()
+        .unwrap()
+        .join("ferret_images")
+        .join("collection");
     let args = Args::parse();
 
     // First, check if the collections directory exists
@@ -104,7 +115,7 @@ fn main() -> Result<()> {
             println!("Checking if jpegoptim is installed...");
             which::which("jpegoptim")
                 .context("jpegoptim is not installed. Please install it to continue.")?;
-            
+
             let mut file: Box<dyn BufReadSeek> = if std::path::Path::new(&source).exists() {
                 // source is a file
                 Box::new(BufReader::new(std::fs::File::open(&source)?))
@@ -155,10 +166,13 @@ fn main() -> Result<()> {
                 .arg("--all-progressive")
                 .arg(&image_path)
                 .output()?;
-            
+
             if !output.status.success() {
                 std::fs::remove_dir_all(&ferret_path)?;
-                bail!("Error optimizing image: {}", String::from_utf8_lossy(&output.stderr));
+                bail!(
+                    "Error optimizing image: {}",
+                    String::from_utf8_lossy(&output.stderr)
+                );
             }
 
             // Check the file size -- warn if over 300k
@@ -215,7 +229,7 @@ fn main() -> Result<()> {
             }
 
             println!("All images verified!");
-        },
+        }
         Subcommand::Statistics => {
             let count = read_dir(collections_path)?.count();
 

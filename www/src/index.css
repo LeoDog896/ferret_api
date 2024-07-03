@@ -3,17 +3,22 @@ body {
 	padding: 0;
 	margin: 0;
 	width: 100%;
-	background-color: #ECD9CA;
-	color: #170A1C;
+	background-color: #ecd9ca;
+	color: #170a1c;
 }
 
 :root {
-	--hot: #F92A82;
-	--cold: #1C6E8C;
+	--hot: #f92a82;
+	--cold: #1c6e8c;
 	--purple: #b342f5;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	font-family: 'Schoolbell', cursive;
 }
 

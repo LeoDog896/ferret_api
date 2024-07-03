@@ -1,5 +1,10 @@
 use actix_cors::Cors;
-use actix_web::{get, http::header::{CacheControl, CacheDirective}, web::{self, Redirect}, App, Either, HttpResponse, HttpServer, Responder};
+use actix_web::{
+    get,
+    http::header::{CacheControl, CacheDirective},
+    web::{self, Redirect},
+    App, Either, HttpResponse, HttpServer, Responder,
+};
 use ferret_image::ImageInfo;
 use include_dir::{include_dir, Dir};
 use once_cell::sync::Lazy;
@@ -10,7 +15,12 @@ use uuid::Uuid;
 // TODO: load this in a more efficient matter straight from the fs; for now, it goes straight into memory
 // since each image is only max 300kb
 static IMAGE_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/../../ferret_images/collection");
-static UUID_LIST: Lazy<Vec<String>> = Lazy::new(|| IMAGE_DIR.dirs().map(|dir| dir.path().to_string_lossy().to_string()).collect::<Vec<_>>());
+static UUID_LIST: Lazy<Vec<String>> = Lazy::new(|| {
+    IMAGE_DIR
+        .dirs()
+        .map(|dir| dir.path().to_string_lossy().to_string())
+        .collect::<Vec<_>>()
+});
 
 const VERSION: &str = "v1";
 
@@ -38,7 +48,7 @@ enum ReturnType {
 struct ImageData {
     metadata: ImageInfo,
     git: String,
-    url: String
+    url: String,
 }
 
 impl ReturnType {
@@ -64,11 +74,11 @@ fn get_dir(uuid: &str, return_type: ReturnType) -> HttpResponse {
             match return_type {
                 ReturnType::Image => {
                     let mut response = HttpResponse::Ok();
-                    
+
                     response.insert_header(CacheControl(vec![CacheDirective::MaxAge(u32::MAX)]));
 
                     response.body(file.contents())
-                },
+                }
                 ReturnType::Data => {
                     let Some(contents_utf8) = file.contents_utf8() else {
                         return HttpResponse::InternalServerError().json(RequestError {
@@ -83,13 +93,17 @@ fn get_dir(uuid: &str, return_type: ReturnType) -> HttpResponse {
                     };
 
                     let mut response = HttpResponse::Ok();
-                    
-                    response.insert_header(CacheControl(vec![CacheDirective::MaxAge(60 * 60 * 24)]));
+
+                    response
+                        .insert_header(CacheControl(vec![CacheDirective::MaxAge(60 * 60 * 24)]));
 
                     response.json(ImageData {
                         metadata: parsed_serde,
-                        git: format!("https://github.com/LeoDog896/ferret_images/tree/main/collection/{}", uuid),
-                        url: format!("/{}/image/uuid/{}", VERSION, uuid)
+                        git: format!(
+                            "https://github.com/LeoDog896/ferret_images/tree/main/collection/{}",
+                            uuid
+                        ),
+                        url: format!("/{}/image/uuid/{}", VERSION, uuid),
                     })
                 }
             }
@@ -113,7 +127,14 @@ async fn data_random() -> Either<HttpResponse, Redirect> {
         }));
     };
 
-    Either::Right(Redirect::to(format!("/{}/data/uuid/{}", VERSION, chosen_directory.path().to_string_lossy())).temporary())
+    Either::Right(
+        Redirect::to(format!(
+            "/{}/data/uuid/{}",
+            VERSION,
+            chosen_directory.path().to_string_lossy()
+        ))
+        .temporary(),
+    )
 }
 
 #[get("/image/random")]
@@ -125,7 +146,12 @@ async fn image_random() -> Either<HttpResponse, Redirect> {
     };
 
     Either::Right(
-        Redirect::to(format!("/{}/image/uuid/{}", VERSION, chosen_directory.path().to_string_lossy())).temporary()
+        Redirect::to(format!(
+            "/{}/image/uuid/{}",
+            VERSION,
+            chosen_directory.path().to_string_lossy()
+        ))
+        .temporary(),
     )
 }
 
@@ -143,13 +169,13 @@ async fn list() -> impl Responder {
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         let cors = Cors::default().allow_any_origin().send_wildcard();
-        
+
         App::new().wrap(cors).service(
             web::scope(&format!("/{}", VERSION))
                 .service(data_random)
                 .service(image_random)
                 .service(data_get_by_uuid)
-                .service(image_get_by_uuid)
+                .service(image_get_by_uuid),
         )
     })
     .bind(("::", 8080))?
