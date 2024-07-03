@@ -29,7 +29,9 @@
 	
         <div class="displayBlock">
             <div class="title"><h2>Example Image</h2></div>
-            <img src={imageURL} alt="Ferret" />
+            <div class="imgContainer">
+                <img src={imageURL} alt="Ferret" />
+            </div>
         </div>
 
         <div class="displayBlock cold">
@@ -104,9 +106,20 @@
 
     img {
         border-bottom: 0;
-        max-height: 800px;
-        width: 100%;
+        max-width: calc(800px - .5rem);
+        width: auto;
         height: auto;
+        max-height: 800px;
+    }
+
+    .imgContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background-image: radial-gradient(var(--purple) 1px, transparent 0);
+        background-size: 5px 5px;
+        background-position: -2px -2px;
     }
 
     .code {
