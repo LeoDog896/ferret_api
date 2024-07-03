@@ -13,6 +13,7 @@
 	},
 	"devDependencies": {
 		"@fontsource/comic-neue": "^5.0.12",
+		"@fontsource/fira-mono": "^5.0.13",
 		"@fontsource/schoolbell": "^5.0.12",
 		"@iconify-json/ph": "^1.1.13",
 		"@sveltejs/adapter-static": "^1.0.4",

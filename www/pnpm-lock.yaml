@@ -11,6 +11,9 @@ importers:
       '@fontsource/comic-neue':
         specifier: ^5.0.12
         version: 5.0.12
+      '@fontsource/fira-mono':
+        specifier: ^5.0.13
+        version: 5.0.13
       '@fontsource/schoolbell':
         specifier: ^5.0.12
         version: 5.0.12
@@ -239,6 +242,9 @@ packages:
 
   '@fontsource/comic-neue@5.0.12':
     resolution: {integrity: sha512-pcW4Ao6MRGjmk+mQdIAbnCJ/xkZbLCVX/EgP7+BTMUqyFWDvavVHdnuQ8anv+VvKCD6fzwMlLw4gAVQANcuXqA==}
+
+  '@fontsource/fira-mono@5.0.13':
+    resolution: {integrity: sha512-fZDjR2BdAqmauEbTjcIT62zYzbOgDa5+IQH34D2k8Pxmy1T815mAqQkZciWZVQ9dc/BgdTtTUV9HJ2ulBNwchg==}
 
   '@fontsource/schoolbell@5.0.12':
     resolution: {integrity: sha512-ul36BWwkiE1V5lRGLwiO6gPmZt/e8B4xkScK3QmfUJj9k8w1m+rWBHiwfpYlv+AZ8d5z4/ge1uKPa0QS4//gmg==}
@@ -1313,6 +1319,8 @@ snapshots:
   '@fastify/busboy@2.1.1': {}
 
   '@fontsource/comic-neue@5.0.12': {}
+
+  '@fontsource/fira-mono@5.0.13': {}
 
   '@fontsource/schoolbell@5.0.12': {}
 
