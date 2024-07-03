@@ -1,3 +1,4 @@
+use actix_cors::Cors;
 use actix_web::{get, http::header::{CacheControl, CacheDirective}, web::{self, Redirect}, App, Either, HttpResponse, HttpServer, Responder};
 use ferret_image::ImageInfo;
 use include_dir::{include_dir, Dir};
@@ -141,7 +142,12 @@ async fn list() -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
-        App::new().service(
+        let cors = Cors::default()
+            .allowed_origin("*")
+            .allowed_methods(vec!["GET"])
+            .max_age(3600);
+        
+        App::new().wrap(cors).service(
             web::scope(&format!("/{}", VERSION))
                 .service(data_random)
                 .service(image_random)

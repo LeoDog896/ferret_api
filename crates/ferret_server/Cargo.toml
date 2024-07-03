@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+actix-cors = "0.7.0"
 actix-web = "4"
 ferret_image = { version = "0.1.0", path = "../ferret_image" }
 include_dir = "0.7.4"
