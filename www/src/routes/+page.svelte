@@ -27,6 +27,8 @@
 		</div>
 		<p>A <span class="hot">RESTful API</span> for <span class="hot">Ferret</span> images.</p>
 	
+        <p>Want to contribute your own images? Head over to the <code class="bubble"><a href="https://github.com/LeoDog896/ferret_images#readme">ferret_images</a></code> repository!</p>
+
         <div class="displayBlock">
             <div class="title"><h2>Example Image</h2></div>
             <div class="imgContainer">
@@ -90,6 +92,16 @@
 
     .left-margin {
         margin-left: 1rem;
+    }
+
+    code.bubble {
+        background-color: var(--purple);
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        
+        a { 
+            color: white;
+        }
     }
 
 	main {
