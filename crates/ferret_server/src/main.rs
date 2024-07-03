@@ -142,10 +142,7 @@ async fn list() -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
-        let cors = Cors::default()
-            .allowed_origin("*")
-            .allowed_methods(vec!["GET"])
-            .max_age(3600);
+        let cors = Cors::default().allow_any_origin().send_wildcard();
         
         App::new().wrap(cors).service(
             web::scope(&format!("/{}", VERSION))
