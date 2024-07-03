@@ -11,6 +11,8 @@ use uuid::Uuid;
 static IMAGE_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/../../ferret_images/collection");
 static UUID_LIST: Lazy<Vec<String>> = Lazy::new(|| IMAGE_DIR.dirs().map(|dir| dir.path().to_string_lossy().to_string()).collect::<Vec<_>>());
 
+const VERSION: &str = "v1";
+
 #[derive(Serialize, Deserialize)]
 enum HandleError {
     InvalidUUID,
@@ -29,6 +31,13 @@ struct RequestError {
 enum ReturnType {
     Image,
     Data,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct ImageData {
+    metadata: ImageInfo,
+    git: String,
+    url: String
 }
 
 impl ReturnType {
@@ -76,7 +85,11 @@ fn get_dir(uuid: &str, return_type: ReturnType) -> HttpResponse {
                     
                     response.insert_header(CacheControl(vec![CacheDirective::MaxAge(60 * 60 * 24)]));
 
-                    response.json(parsed_serde)
+                    response.json(ImageData {
+                        metadata: parsed_serde,
+                        git: format!("https://github.com/LeoDog896/ferret_images/tree/main/collection/{}", uuid),
+                        url: format!("/{}/image/uuid/{}", VERSION, uuid)
+                    })
                 }
             }
         }
@@ -86,12 +99,12 @@ fn get_dir(uuid: &str, return_type: ReturnType) -> HttpResponse {
     }
 }
 
-#[get("/v1/data/uuid/{uuid}")]
+#[get("/data/uuid/{uuid}")]
 async fn data_get_by_uuid(uuid: web::Path<String>) -> impl Responder {
     get_dir(&uuid, ReturnType::Data)
 }
 
-#[get("/v1/data/random")]
+#[get("/data/random")]
 async fn data_random() -> Either<HttpResponse, Redirect> {
     let Some(chosen_directory) = IMAGE_DIR.dirs().choose(&mut thread_rng()) else {
         return Either::Left(HttpResponse::InternalServerError().json(RequestError {
@@ -99,10 +112,10 @@ async fn data_random() -> Either<HttpResponse, Redirect> {
         }));
     };
 
-    Either::Right(Redirect::to(format!("/v1/data/uuid/{}", chosen_directory.path().to_string_lossy())).temporary())
+    Either::Right(Redirect::to(format!("/{}/data/uuid/{}", VERSION, chosen_directory.path().to_string_lossy())).temporary())
 }
 
-#[get("/v1/image/random")]
+#[get("/image/random")]
 async fn image_random() -> Either<HttpResponse, Redirect> {
     let Some(chosen_directory) = IMAGE_DIR.dirs().choose(&mut thread_rng()) else {
         return Either::Left(HttpResponse::InternalServerError().json(RequestError {
@@ -111,16 +124,16 @@ async fn image_random() -> Either<HttpResponse, Redirect> {
     };
 
     Either::Right(
-        Redirect::to(format!("/v1/image/uuid/{}", chosen_directory.path().to_string_lossy())).temporary()
+        Redirect::to(format!("/{}/image/uuid/{}", VERSION, chosen_directory.path().to_string_lossy())).temporary()
     )
 }
 
-#[get("/v1/image/uuid/{uuid}")]
+#[get("/image/uuid/{uuid}")]
 async fn image_get_by_uuid(uuid: web::Path<String>) -> impl Responder {
     get_dir(&uuid, ReturnType::Image)
 }
 
-#[get("/v1/list")]
+#[get("/list")]
 async fn list() -> impl Responder {
     HttpResponse::Ok().json(UUID_LIST.clone())
 }
@@ -128,11 +141,13 @@ async fn list() -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
-        App::new()
-            .service(data_random)
-            .service(image_random)
-            .service(data_get_by_uuid)
-            .service(image_get_by_uuid)
+        App::new().service(
+            web::scope(&format!("/{}", VERSION))
+                .service(data_random)
+                .service(image_random)
+                .service(data_get_by_uuid)
+                .service(image_get_by_uuid)
+        )
     })
     .bind(("::", 8080))?
     .run()

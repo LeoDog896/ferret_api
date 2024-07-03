@@ -17,7 +17,6 @@ Root for the following queries will be in `/v1/`:
 
 `list`: get the list of every single ferret UUID
 
-=======
 `ferrets/random`: gets a random ferret.
 
 ## Setup
